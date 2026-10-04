@@ -1,3 +1,13 @@
+/*
+脚本名称：DWD 层设备数据清洗加载脚本
+功能：将 ODS 层（ods_machine_raw）的原始设备数据经过清洗、类型转换和标准化后，
+      加载至 DWD 层明细表（dwd_machine_clean）中。
+说明：脚本使用 INSERT INTO ... SELECT 语句，实现从原始层到明细层的数据流转；
+      处理逻辑包含：去除字段首尾空格（TRIM）、字段类型转换（CAST）、
+      基于 UDI 推算事件时间及日期维度键（DATE_ADD、DATE_FORMAT）；
+      并通过 WHERE 条件过滤无效产品类型（仅保留 L/M/H）及异常故障标签（仅保留 0/1），
+      确保进入明细层的数据质量，为后续多维度关联分析提供可靠基础。
+*/
 USE industrial_supply_chain_sales_analytics;
 
 INSERT INTO dwd_machine_clean (
