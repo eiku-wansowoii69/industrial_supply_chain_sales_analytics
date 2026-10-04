@@ -1,3 +1,14 @@
+/*
+脚本名称：DWS 层设备日志事实表建表及加载脚本
+功能：创建数据仓库汇总层（dws）的设备运行事实表（dws_fact_equipment_log），并将 DWD 层
+      清洗后的明细数据关联产品维度表后加载至事实表，构建星型模型核心事实表。
+说明：脚本使用 DROP TABLE IF EXISTS 判断，表示已存在时先删除再重建，可重复运行；
+      共 1 张表（dws_fact_equipment_log），包含代理键（log_id）、设备主键（udi）、
+      产品外键（product_key）、时间外键（date_key）以及各项传感器指标与故障标签；
+      通过外键约束关联 dws_dim_product 与 dws_dim_date，保证维度数据一致性；
+      数据加载通过 JOIN dws_dim_product 获取产品代理键，并附加日期维度键，
+      为后续多维度关联分析、设备故障预测及机器学习建模提供标准化事实数据支撑。
+*/
 USE industrial_supply_chain_sales_analytics;
 
 DROP TABLE IF EXISTS dws_fact_equipment_log;
